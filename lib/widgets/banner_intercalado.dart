@@ -119,7 +119,16 @@ class _BannerIntercaladoState extends State<BannerIntercalado>
       ),
     );
 
-    await banner.load();
+    // Si el SDK no quedo disponible, la peticion lanza. El feed debe seguir
+    // funcionando sin publicidad, asi que el error se registra y no se
+    // propaga.
+    try {
+      await banner.load();
+    } catch (error) {
+      debugPrint('No se pudo solicitar el banner intercalado: $error');
+      await banner.dispose();
+      _cargaEnCurso = false;
+    }
   }
 
   /// Cierra la carga en curso y atiende un ancho que haya cambiado mientras

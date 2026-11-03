@@ -1,16 +1,31 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'pantallas/feed_pantalla.dart';
 
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // El SDK de Google Mobile Ads debe quedar inicializado antes de solicitar
-  // cualquier anuncio; de lo contrario la primera peticion falla.
-  await MobileAds.instance.initialize();
+  // La inicializacion del SDK no se espera antes de dibujar: si el
+  // dispositivo no tiene Google Play Services, los tiene desactualizados o
+  // esta sin red, esa llamada puede fallar o no responder nunca. Bloquear
+  // runApp con ella deja la aplicacion sin pintar y el sistema la cierra.
+  //
+  // El feed debe abrir siempre; la publicidad es un extra que puede faltar.
+  unawaited(_inicializarAnuncios());
 
   runApp(const AppAiltonAds());
+}
+
+Future<void> _inicializarAnuncios() async {
+  try {
+    await MobileAds.instance.initialize();
+  } catch (error, rastro) {
+    debugPrint('No se pudo inicializar Google Mobile Ads: $error');
+    debugPrintStack(stackTrace: rastro);
+  }
 }
 
 class AppAiltonAds extends StatelessWidget {
