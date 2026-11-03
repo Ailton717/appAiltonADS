@@ -35,6 +35,15 @@ En este proyecto se intercala un anuncio cada tres articulos
 Mientras el anuncio no ha cargado, el widget no ocupa espacio, de modo que el
 feed se comporta igual que sin publicidad.
 
+Detalles de la implementacion:
+
+- El ancho se mide con `LayoutBuilder` y se le descuenta el margen, de forma
+  que lo que se pide al SDK coincide exactamente con lo que se dibuja.
+- Si el ancho cambia mientras el anuncio viaja (una rotacion a medio cargar),
+  al terminar se vuelve a pedir con el tamano nuevo.
+- Una peticion fallida se reintenta hasta dos veces, util cuando el
+  dispositivo aun no tiene red al abrir la aplicacion.
+
 ## Estructura
 
 ```
@@ -57,7 +66,7 @@ Configuracion por plataforma:
 ## Requisitos
 
 - Flutter 3.47 o superior
-- Android SDK (API 21+)
+- Android SDK con `minSdk` 24 o superior, requisito de `google_mobile_ads`
 
 ## Ejecucion
 
