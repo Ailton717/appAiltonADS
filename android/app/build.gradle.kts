@@ -34,6 +34,9 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
+            // Reglas necesarias para que R8 no elimine miembros que solo se
+            // usan por reflexion. Ver android/app/proguard-rules.pro.
+            proguardFiles("proguard-rules.pro")
         }
     }
 }
