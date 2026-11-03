@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'pantallas/feed_pantalla.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // El SDK de Google Mobile Ads debe quedar inicializado antes de solicitar
+  // cualquier anuncio; de lo contrario la primera peticion falla.
+  await MobileAds.instance.initialize();
+
   runApp(const AppAiltonAds());
 }
 
